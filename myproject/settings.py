@@ -32,13 +32,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '1n3s_@n2^a#vlg2pk!6vg7qz3$^8xu!ob!(clw@e*qz!o1bl-)s'
 
 # Determine if we're in development or production
-DEVELOPMENT = os.environ.get('DEVELOPMENT', 'True') == 'True'
+DEVELOPMENT = os.environ.get('DEVELOPMENT', 'False') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEVELOPMENT
 
 # Add allowed hosts - adjust these based on your deployment needs
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'easyhire-quvx.onrender.com',
+    '.onrender.com'  # This will allow all subdomains of onrender.com
+]
 
 
 # Application definition
@@ -178,15 +183,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Security Settings for Development
-if DEVELOPMENT:
-    SECURE_SSL_REDIRECT = False
-    SECURE_PROXY_SSL_HEADER = None
-    SECURE_HSTS_SECONDS = 0
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-    SECURE_HSTS_PRELOAD = False
-    SECURE_BROWSER_XSS_FILTER = False
-    SECURE_CONTENT_TYPE_NOSNIFF = False
-else:
+if not DEVELOPMENT:  # Production settings
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_HSTS_SECONDS = 31536000
@@ -196,6 +193,10 @@ else:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    CSRF_TRUSTED_ORIGINS = [
+        'https://easyhire-quvx.onrender.com',
+        'https://*.onrender.com'
+    ]
 
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
