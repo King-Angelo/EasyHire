@@ -3,7 +3,7 @@ services:
     name: easyhire
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn wsgi:application
+    startCommand: gunicorn myproject.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
